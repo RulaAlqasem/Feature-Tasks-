@@ -2,12 +2,8 @@
 let leftIndex;
 let centerIndex;
 let rightIndex;
-// let leftIndex2;
-// let centerIndex2;
-// let rightIndex2;
-//const article=document.getElementById('article');
 let click =0;
-let attempt=25;
+let attempt=5;
 const names = [
   'bag',
   'banana',
@@ -53,7 +49,8 @@ const namesext = [
   'wine-glass.jpg'
 ];
 
-
+let views2=[];
+let votes2=[];
 
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -80,43 +77,48 @@ for(let i =0;i<names.length;i++){
   new Product(names[i],namesext[i]);
 
 }
-
+let names2=[];
 
 function render(){
   leftIndex = randomNumber(0,Product.all.length-1);
+  while(names2.includes(leftIndex)){
+    leftIndex = randomNumber(0,Product.all.length-1);}
 
   leftImage.src = Product.all[leftIndex].path;
   leftImage.alt = Product.all[leftIndex].name;
   leftImage.title = Product.all[leftIndex].name;
-  console.log(leftIndex);
+
+  names.push(leftIndex);
 
   centerIndex = randomNumber(0,Product.all.length-1);
 
-  while(centerIndex===leftIndex){
+  while(centerIndex===leftIndex||names2.includes(centerIndex)){
     centerIndex = randomNumber(0,Product.all.length-1);
   }
   centerImage.src = Product.all[centerIndex].path;
   centerImage.alt = Product.all[centerIndex].name;
   centerImage.title = Product.all[centerIndex].name;
+  names2.push(centerIndex);
 
-  console.log(centerIndex);
+
 
   rightIndex = randomNumber(0,Product.all.length-1);
 
-  while((rightIndex===leftIndex) || (rightIndex===centerIndex)){
+  while((rightIndex===leftIndex) || (rightIndex===centerIndex)||names2.includes( rightIndex )){
     rightIndex = randomNumber(0,Product.all.length-1);
   }
   rightImage.src = Product.all[rightIndex].path;
   rightImage.alt = Product.all[rightIndex].name;
   rightImage.title = Product.all[rightIndex].name;
+  names2.push(rightIndex);
 
 
-  console.log(rightIndex);
+
 
 
 }
 
-console.log(rightIndex);
+
 
 
 
@@ -135,12 +137,14 @@ function voteFor(event){
       Product.all[leftIndex].views++;
       Product.all[centerIndex].views++;
       Product.all[rightIndex].views++;
+
     }
     else if(event.target.id === centerImage.id){
       Product.all[centerIndex].votes++;
       Product.all[leftIndex].views++;
       Product.all[centerIndex].views++;
       Product.all[rightIndex].views++;
+
     }
     else{
       Product.all[leftIndex].votes++;
@@ -149,12 +153,10 @@ function voteFor(event){
       Product.all[rightIndex].views++;
 
     }
-  }
-  console.table(Product.all);
 
-  console.log(click);
-  // if (render()!==render2()) {
-  // render2();
+  }
+
+
 
   render();
 
@@ -165,26 +167,68 @@ function voteFor(event){
 
 render();
 
-
+const endVote =document.getElementById('endVote');
 function button(){
-  const endVote =document.getElementById('endVote');
+
   endVote.style.visibility = 'hidden';
   endVote.addEventListener('click', stopVote);
-  console.log(click);
+
   if (click>=attempt) {
     endVote.style.visibility = 'visible';
+    imagesSection.removeEventListener('click',voteFor);
+
   }
+
 }
 
 
 function stopVote(){
-  // event.preventDefault();
+
   const ulEl = document.getElementById('list');
   for(let i=0; i< names.length; i++)
-  {
+  {votes2.push(Product.all[i].votes);
+    views2.push(Product.all[i].views);
     const liEl = document.createElement('li');
     ulEl.appendChild(liEl);
     liEl.textContent = `${Product.all[i].name} had ${Product.all[i].votes} votes, and was seen ${Product.all[i].views} times.` ;
+
+
+    endVote.removeEventListener('click', stopVote);
+    myChart();
   }
-  imagesSection.removeEventListener('click',voteFor);
+
+
+
+}
+function myChart() {
+
+
+  let ctx = document.getElementById('myChart').getContext('2d');
+  let chart = new Chart(ctx, {
+
+    type: 'bar',
+
+
+    data: {
+      labels:names,
+      datasets: [{
+        label: 'votes',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(4, 14, 61)',
+        data: votes2
+      },
+      {
+        label: 'views',
+        backgroundColor: 'rgb(4, 14, 61)',
+        borderColor: 'rgb(255, 99, 132)',
+
+        data: views2
+      },
+      ]
+
+    },
+
+
+    options: {}
+  });
 }
