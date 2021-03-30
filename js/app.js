@@ -3,7 +3,9 @@ let leftIndex;
 let centerIndex;
 let rightIndex;
 let click =0;
-let attempt=5;
+let attempt=25;
+
+
 const names = [
   'bag',
   'banana',
@@ -73,27 +75,36 @@ function Product(name, namesext) {
 }
 Product.all = [];
 
-for(let i =0;i<names.length;i++){
+for(let i =0;i <= names.length-1;i++){
   new Product(names[i],namesext[i]);
 
 }
+
+
+console.log('nam',names);
+
+
 let names2=[];
 
 function render(){
+
+
   leftIndex = randomNumber(0,Product.all.length-1);
   while(names2.includes(leftIndex)){
-    leftIndex = randomNumber(0,Product.all.length-1);}
+    leftIndex = randomNumber(0,Product.all.length-1);
+    names2.shift();}
 
   leftImage.src = Product.all[leftIndex].path;
   leftImage.alt = Product.all[leftIndex].name;
   leftImage.title = Product.all[leftIndex].name;
 
-  names.push(leftIndex);
+  names2.push(leftIndex);
 
   centerIndex = randomNumber(0,Product.all.length-1);
 
   while(centerIndex===leftIndex||names2.includes(centerIndex)){
     centerIndex = randomNumber(0,Product.all.length-1);
+    names2.shift();
   }
   centerImage.src = Product.all[centerIndex].path;
   centerImage.alt = Product.all[centerIndex].name;
@@ -106,11 +117,15 @@ function render(){
 
   while((rightIndex===leftIndex) || (rightIndex===centerIndex)||names2.includes( rightIndex )){
     rightIndex = randomNumber(0,Product.all.length-1);
+    names2.shift();
   }
   rightImage.src = Product.all[rightIndex].path;
   rightImage.alt = Product.all[rightIndex].name;
   rightImage.title = Product.all[rightIndex].name;
   names2.push(rightIndex);
+
+  
+  console.log('names2',names2);
 
 
 
@@ -118,16 +133,23 @@ function render(){
 
 }
 
-
-
-
-
 imagesSection.addEventListener('click',voteFor);
+const endVote =document.getElementById('endVote');
+endVote.style.visibility = 'hidden';
+endVote.addEventListener('click', stopVote);
+
 
 function voteFor(event){
   click+=1;
+  console.log('click',click);
+  // button();
 
-  button();
+
+  if (click>=attempt) {
+    endVote.style.visibility = 'visible';
+    imagesSection.removeEventListener('click',voteFor);
+
+  }
 
   if(event.target.id !== 'images-section'){
 
@@ -160,75 +182,69 @@ function voteFor(event){
 
   render();
 
+
+
 }
-
-
-
 
 render();
 
-const endVote =document.getElementById('endVote');
-function button(){
 
-  endVote.style.visibility = 'hidden';
-  endVote.addEventListener('click', stopVote);
 
-  if (click>=attempt) {
-    endVote.style.visibility = 'visible';
-    imagesSection.removeEventListener('click',voteFor);
 
-  }
+// function button(){
 
-}
+//
+
+//   // if (click>=attempt) {
+//   //   endVote.style.visibility = 'visible';
+//   //   imagesSection.removeEventListener('click',voteFor);
+
+//   // }
+
+// }
 
 
 function stopVote(){
 
   const ulEl = document.getElementById('list');
   for(let i=0; i< names.length; i++)
-  {votes2.push(Product.all[i].votes);
-    views2.push(Product.all[i].views);
+  {
     const liEl = document.createElement('li');
     ulEl.appendChild(liEl);
     liEl.textContent = `${Product.all[i].name} had ${Product.all[i].votes} votes, and was seen ${Product.all[i].views} times.` ;
-
+    votes2.push(Product.all[i].votes);
+    views2.push(Product.all[i].views);
 
     endVote.removeEventListener('click', stopVote);
-    myChart();
+
+    chartRender();
   }
 
 
 
 }
-function myChart() {
-
-
+function chartRender() {
   let ctx = document.getElementById('myChart').getContext('2d');
   let chart = new Chart(ctx, {
-
+    // The type of chart we want to create
     type: 'bar',
-
-
+    // The data for our dataset
     data: {
-      labels:names,
+      labels: names,
       datasets: [{
-        label: 'votes',
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(4, 14, 61)',
+        label: 'Products Votes',
+        backgroundColor: 'red',
+        borderColor: 'rgb(255, 99, 132)',
         data: votes2
       },
       {
-        label: 'views',
-        backgroundColor: 'rgb(4, 14, 61)',
+        label: 'Products Views',
+        backgroundColor: 'yellow',
         borderColor: 'rgb(255, 99, 132)',
-
         data: views2
-      },
-      ]
-
+      }]
     },
-
-
+    // Configuration options go here
     options: {}
   });
 }
