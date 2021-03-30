@@ -3,7 +3,7 @@ let leftIndex;
 let centerIndex;
 let rightIndex;
 let click =0;
-let attempt=1;
+let attempt=25;
 
 
 const names = [
