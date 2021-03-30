@@ -3,7 +3,7 @@ let leftIndex;
 let centerIndex;
 let rightIndex;
 let click =0;
-let attempt=25;
+let attempt=1;
 
 
 const names = [
@@ -72,6 +72,8 @@ function Product(name, namesext) {
   this.views = 0;
 
   Product.all.push(this);
+
+
 }
 Product.all = [];
 
@@ -124,7 +126,7 @@ function render(){
   rightImage.title = Product.all[rightIndex].name;
   names2.push(rightIndex);
 
-  
+
   console.log('names2',names2);
 
 
@@ -148,6 +150,8 @@ function voteFor(event){
   if (click>=attempt) {
     endVote.style.visibility = 'visible';
     imagesSection.removeEventListener('click',voteFor);
+
+
 
   }
 
@@ -176,6 +180,7 @@ function voteFor(event){
 
     }
 
+
   }
 
 
@@ -202,11 +207,12 @@ render();
 //   // }
 
 // }
-
+const ulEl = document.getElementById('list');
+ulEl.style.visibility = 'hidden';
 
 function stopVote(){
 
-  const ulEl = document.getElementById('list');
+
   for(let i=0; i< names.length; i++)
   {
     const liEl = document.createElement('li');
@@ -216,11 +222,11 @@ function stopVote(){
     views2.push(Product.all[i].views);
 
     endVote.removeEventListener('click', stopVote);
-
+    settingItem();
     chartRender();
   }
 
-
+  ulEl.style.visibility = 'visible';
 
 }
 function chartRender() {
@@ -233,14 +239,14 @@ function chartRender() {
       labels: names,
       datasets: [{
         label: 'Products Votes',
-        backgroundColor: 'red',
-        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'black',
+        borderColor: 'gray',
         data: votes2
       },
       {
         label: 'Products Views',
-        backgroundColor: 'yellow',
-        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: '#668e6c',
+        borderColor: 'gray',
         data: views2
       }]
     },
@@ -248,3 +254,26 @@ function chartRender() {
     options: {}
   });
 }
+
+
+function settingItem() {
+  let data = JSON.stringify(Product.all);
+  // console.log(data);
+  localStorage.setItem('Product', data);
+}
+
+function gettingItem() {
+  let stringObj = localStorage.getItem('Product');
+  // console.log('from the local storage', stringObj);
+  let normalObj = JSON.parse(stringObj);
+  // console.log('after parsing', normalObj);
+  if (normalObj !== null) {
+
+    Product.all = normalObj;
+  }
+
+}
+
+
+gettingItem();
+

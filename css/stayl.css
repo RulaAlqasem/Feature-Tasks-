@@ -2,4 +2,75 @@ main section img{
     width: 300px;
     margin-left: 72px;
 }
+
+body > header > h1{
+    margin-bottom: 59px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-left: 413px;
+    margin-right: 33px;
+    margin-top: 0px;
+    background-color: #668e80;
+}
+body > header{
+    background-color: #668e80;
+}
+#left-image{
+    width: 300px;
+    margin-left: 72px;
+    border: rgb(187, 180, 180);
+    border-block-end-style: initial;
+    border-style: ridge;
+    cursor: pointer;
+    text-shadow: 0 0 rgb(165, 155, 155);
+    height: 350px;
+    border-width: thick;
+}
+#center-image{
+    width: 300px;
+    margin-left: 72px;
+    border: rgb(187, 180, 180);
+    border-block-end-style: initial;
+    border-style: ridge;
+    cursor: pointer;
+    text-shadow: 0 0 black;
+    height: 350px;
+    border-width: thick;
+}
+#right-image{
+       width: 300px;
+    margin-left: 72px;
+    border: rgb(187, 180, 180);
+    border-block-end-style: initial;
+    border-style: ridge;
+    cursor: pointer;
+    text-shadow: 0 0 black;
+    height: 350px;
+    border-width: thick;
+}
+
+#endVote{
+    width: 116px;
+    height: 36px;
+    margin-right: 658px;
+    margin-left: 553px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#list{
+    list-style: none;
+    text-align: center;
+    border-style: ridge;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    -webkit-text-emphasis-style: open;
+    overflow-y: scroll;
+    height: 108px;
+    width: fit-content;
+    border-right-width: 0px;
+
+    padding-right: 50px;
+    padding-left: 50px;
+   
+    margin-left: 409px;
 }
